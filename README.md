@@ -1,35 +1,41 @@
-# Titan Souls Keyboard
-Keyboard and mouse support for Titan Souls
+# Keyboard Mod for Titan Souls
+Improved keyboard and mouse support for Titan Souls on PC
 
-## Features
-* Toggle keyboard mode on/off
-* Configure controls
-* Adjust mouse sensitivity
-* Adjust delay between updates
+## 🎉 v2.0.0 released! Grab it [here](releases)
+
+## Changelog
+* v2.0.0
+    * Complete re-write of the project
+    * Standalone .dll - no drivers needed
+    * Mouse capture - support for windowed mode
+* v1.0.1
+    * Change default hotkey
+    * Always enforce mouse radius limit
+* v1.0.0
+    * Initial release
+
+## Controls
+| Action | Description                                                         | Key         |
+|--------|---------------------------------------------------------------------|-------------|
+| Up     | Hold to move up                                                     | W           |
+| Down   | Hold to move down                                                   | S           |
+| Left   | Hold to move left                                                   | A           |
+| Right  | Hold to move right                                                  | D           |
+| Roll   | Press to roll <br> Hold to run                                      | Spacebar    |
+| Attack | Hold to aim with mouse <br> Release to fire <br> Hold to call arrow | Left Mouse  |
+| Camera | Hold to move camera with mouse <br> Release to re-center            | Right Mouse |
 
 ## Usage
-* Install [ScpVBus driver](https://github.com/shauleiz/ScpVBus/releases)
-* Download this project's [newest release](https://github.com/martinsomer/Titan-Souls-Keyboard/releases)
-* Run the executable and launch Titan Souls
-* Activate keyboard mode by pressing the hotkey
+* Download the latest [release](releases)
+* Extract version.dll into the game folder
+* Launch the game
 
-## Configuration
-The following settings can be adjusted in `config.ini`:
-| Option | Description | Default Value |
-| :---: | :---: | :---: |
-| Up | Move up | W (0x57) |
-| Down | Move down | S (0x53) |
-| Left | Move left | A (0x41) |
-| Right | Move right | D (0x44) |
-| Roll | Press to roll <br> Hold to run | Space (0x20) |
-| Fire | Hold to aim with mouse, release to fire <br> Hold to call arrow | Left Mouse (0x01) |
-| Camera | Hold to move camera with mouse | Right Mouse (0x02) |
-| Sensitivity | Lower is more sensitive | 100 |
-| Delay | Number of milliseconds between updates | 10 |
-| Hotkey | Toggle keyboard mode on/off | F4 (0x73) |
+## Compiling
+* Install MSVC x86
+* Open MSVC Developer Command Prompt
+* Run compile.cmd
 
 ## Dependencies
-* [vXboxInterface](https://github.com/shauleiz/vXboxInterface)
-
-## License
-[MIT License](LICENSE.txt)
+* [MinHook](https://github.com/TsudaKageyu/minhook)
+* [Dll Proxy](https://github.com/martinsomer/dll-proxy)
+* [SDL v2.0.3](https://github.com/libsdl-org/SDL/tree/release-2.0.3)
