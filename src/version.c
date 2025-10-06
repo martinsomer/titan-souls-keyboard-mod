@@ -155,6 +155,13 @@ DWORD WINAPI InputThread(LPVOID param) {
                     controller_set_axis(SDL_CONTROLLER_AXIS_RIGHTX, x);
                     controller_set_axis(SDL_CONTROLLER_AXIS_RIGHTY, y);
                 }
+
+                double d = sqrt(dx * dx + dy * dy);
+                if (d > 100) {
+                    LONG mx = center.x + (double) dx / d * 100;
+                    LONG my = center.y + (double) dy / d * 100;
+                    SetCursorPos(mx, my);
+                }
             }
 
             if (kbstate->roll.changed) {
