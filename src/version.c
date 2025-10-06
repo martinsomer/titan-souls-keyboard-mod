@@ -159,12 +159,12 @@ DWORD WINAPI InputThread(LPVOID param) {
                 controller_set_button(SDL_CONTROLLER_BUTTON_A, kbstate->roll.state);
             }
 
-            if (kbstate->left.changed || kbstate->right.changed || kbstate->fire.changed) {
+            if ((kbstate->left.changed || kbstate->right.changed || kbstate->fire.changed) && !kbstate->fire.state) {
                 Sint16 x = kbstate->left.state * -32767 + kbstate->right.state * 32767;
                 controller_set_axis(SDL_CONTROLLER_AXIS_LEFTX, x);
             }
 
-            if (kbstate->up.changed || kbstate->down.changed || kbstate->fire.changed) {
+            if ((kbstate->up.changed || kbstate->down.changed || kbstate->fire.changed) && !kbstate->fire.state) {
                 Sint16 y = kbstate->up.state * -32767 + kbstate->down.state * 32767;
                 controller_set_axis(SDL_CONTROLLER_AXIS_LEFTY, y);
             }
