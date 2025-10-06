@@ -113,17 +113,19 @@ DWORD WINAPI InputThread(LPVOID param) {
                 tl.y + ((rect.bottom - rect.top) / 2),
             };
 
-            if (kbstate->fire.changed) {
-                controller_set_button(SDL_CONTROLLER_BUTTON_X, kbstate->fire.state);
+            if (kbstate->fire.changed || kbstate->camera.changed) {
+                if (kbstate->fire.state || kbstate->camera.state) {
+                    SetCursorPos(center.x, center.y);
+                }
+
+                if (kbstate->fire.changed) {
+                    controller_set_button(SDL_CONTROLLER_BUTTON_X, kbstate->fire.state);
+                }
 
                 if (!kbstate->fire.state) {
                     controller_set_axis(SDL_CONTROLLER_AXIS_LEFTX, 0);
                     controller_set_axis(SDL_CONTROLLER_AXIS_LEFTY, 0);
                 }
-            }
-
-            if (kbstate->camera.changed) {
-                SetCursorPos(center.x, center.y);
 
                 if (!kbstate->camera.state) {
                     controller_set_axis(SDL_CONTROLLER_AXIS_RIGHTX, 0);
