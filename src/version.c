@@ -7,6 +7,8 @@
 #include "SDL.h"
 #include "SDL_syswm.h"
 
+#define MOUSE_RADIUS 100
+
 HANDLE hThread = NULL;
 HWND hGame = NULL;
 
@@ -140,11 +142,11 @@ DWORD WINAPI InputThread(LPVOID param) {
                 Sint16 dx = mouse.x - center.x;
                 Sint16 dy = mouse.y - center.y;
 
-                dx = dx < -100 ? -100 : (dx > 100 ? 100 : dx);
-                dy = dy < -100 ? -100 : (dy > 100 ? 100 : dy);
+                dx = dx < -MOUSE_RADIUS ? -MOUSE_RADIUS : (dx > MOUSE_RADIUS ? MOUSE_RADIUS : dx);
+                dy = dy < -MOUSE_RADIUS ? -MOUSE_RADIUS : (dy > MOUSE_RADIUS ? MOUSE_RADIUS : dy);
 
-                Sint16 x = dx * 32767 / 100;
-                Sint16 y = dy * 32767 / 100;
+                Sint16 x = dx * 32767 / MOUSE_RADIUS;
+                Sint16 y = dy * 32767 / MOUSE_RADIUS;
 
                 if (kbstate->fire.state) {
                     controller_set_axis(SDL_CONTROLLER_AXIS_LEFTX, x);
@@ -157,9 +159,9 @@ DWORD WINAPI InputThread(LPVOID param) {
                 }
 
                 double d = sqrt(dx * dx + dy * dy);
-                if (d > 100) {
-                    LONG mx = center.x + (double) dx / d * 100;
-                    LONG my = center.y + (double) dy / d * 100;
+                if (d > MOUSE_RADIUS) {
+                    LONG mx = center.x + (double) dx / d * MOUSE_RADIUS;
+                    LONG my = center.y + (double) dy / d * MOUSE_RADIUS;
                     SetCursorPos(mx, my);
                 }
             }
