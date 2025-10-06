@@ -139,8 +139,8 @@ DWORD WINAPI InputThread(LPVOID param) {
                 POINT mouse;
                 GetCursorPos(&mouse);
 
-                Sint16 dx = mouse.x - center.x;
-                Sint16 dy = mouse.y - center.y;
+                LONG dx = mouse.x - center.x;
+                LONG dy = mouse.y - center.y;
 
                 dx = dx < -MOUSE_RADIUS ? -MOUSE_RADIUS : (dx > MOUSE_RADIUS ? MOUSE_RADIUS : dx);
                 dy = dy < -MOUSE_RADIUS ? -MOUSE_RADIUS : (dy > MOUSE_RADIUS ? MOUSE_RADIUS : dy);
