@@ -145,8 +145,8 @@ DWORD WINAPI InputThread(LPVOID param) {
                 dx = dx < -MOUSE_RADIUS ? -MOUSE_RADIUS : (dx > MOUSE_RADIUS ? MOUSE_RADIUS : dx);
                 dy = dy < -MOUSE_RADIUS ? -MOUSE_RADIUS : (dy > MOUSE_RADIUS ? MOUSE_RADIUS : dy);
 
-                Sint16 x = dx * 32767 / MOUSE_RADIUS;
-                Sint16 y = dy * 32767 / MOUSE_RADIUS;
+                Sint16 x = (Sint16) (dx * 32767 / MOUSE_RADIUS);
+                Sint16 y = (Sint16) (dy * 32767 / MOUSE_RADIUS);
 
                 if (kbstate->fire.state) {
                     controller_set_axis(SDL_CONTROLLER_AXIS_LEFTX, x);
@@ -160,8 +160,8 @@ DWORD WINAPI InputThread(LPVOID param) {
 
                 double d = sqrt(dx * dx + dy * dy);
                 if (d > MOUSE_RADIUS) {
-                    LONG mx = center.x + (double) dx / d * MOUSE_RADIUS;
-                    LONG my = center.y + (double) dy / d * MOUSE_RADIUS;
+                    LONG mx = (LONG) (center.x + (double) dx / d * MOUSE_RADIUS);
+                    LONG my = (LONG) (center.y + (double) dy / d * MOUSE_RADIUS);
                     SetCursorPos(mx, my);
                 }
             }
@@ -171,12 +171,12 @@ DWORD WINAPI InputThread(LPVOID param) {
             }
 
             if ((kbstate->left.changed || kbstate->right.changed || kbstate->fire.changed) && !kbstate->fire.state) {
-                Sint16 x = kbstate->left.state * -32767 + kbstate->right.state * 32767;
+                Sint16 x = (Sint16) (kbstate->left.state * -32767 + kbstate->right.state * 32767);
                 controller_set_axis(SDL_CONTROLLER_AXIS_LEFTX, x);
             }
 
             if ((kbstate->up.changed || kbstate->down.changed || kbstate->fire.changed) && !kbstate->fire.state) {
-                Sint16 y = kbstate->up.state * -32767 + kbstate->down.state * 32767;
+                Sint16 y = (Sint16) (kbstate->up.state * -32767 + kbstate->down.state * 32767);
                 controller_set_axis(SDL_CONTROLLER_AXIS_LEFTY, y);
             }
         }
