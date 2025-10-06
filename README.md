@@ -1,7 +1,7 @@
 # Keyboard Mod for Titan Souls
 Improved keyboard and mouse support for Titan Souls on PC
 
-## 🎉 v2.0.0 released! Grab it [here](releases)
+## 🎉 v2.0.0 released! Grab it [here](https://github.com/martinsomer/titan-souls-keyboard-mod/releases)
 
 ## Changelog
 * v2.0.0
@@ -26,7 +26,7 @@ Improved keyboard and mouse support for Titan Souls on PC
 | Camera | Hold to move camera with mouse <br> Release to re-center            | Right Mouse |
 
 ## Usage
-* Download the latest [release](releases)
+* Download the latest release
 * Extract version.dll into the game folder
 * Launch the game
 
@@ -36,6 +36,6 @@ Improved keyboard and mouse support for Titan Souls on PC
 * Run compile.cmd
 
 ## Dependencies
-* [MinHook](https://github.com/TsudaKageyu/minhook)
 * [Dll Proxy](https://github.com/martinsomer/dll-proxy)
 * [SDL v2.0.3](https://github.com/libsdl-org/SDL/tree/release-2.0.3)
+* [MinHook v1.3.4](https://github.com/TsudaKageyu/minhook/tree/v1.3.4)
