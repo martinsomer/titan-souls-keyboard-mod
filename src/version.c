@@ -94,7 +94,7 @@ void controller_set_axis(Uint8 axis, Sint16 value) {
     pSDL_PushEvent(&event);
 }
 
-DWORD WINAPI InputThread(LPVOID param) {
+DWORD WINAPI InputThread(LPVOID lpParam) {
     controller_attach();
 
     while (TRUE) {
