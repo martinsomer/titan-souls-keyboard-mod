@@ -190,7 +190,7 @@ DWORD WINAPI InputThread(LPVOID lpParam) {
 void on_attach(void) {
     MH_Initialize();
 
-    HMODULE hSDL = GetModuleHandleA("SDL2.dll");
+    HMODULE hSDL = GetModuleHandleW(L"SDL2.dll");
 
     // Hook window methods for mouse capture
     pSDL_GetWindowWMInfo = (SDL_GetWindowWMInfo_t)GetProcAddress(hSDL, "SDL_GetWindowWMInfo");
