@@ -24,6 +24,7 @@ Improved keyboard and mouse support for Titan Souls on PC
     - Complete re-write of the project
     - Standalone .dll - no drivers needed
     - Mouse capture - support for windowed mode
+    - Multi-threading - no main thread blocking
 - v1.0.1
     - Change default hotkey
     - Always enforce mouse radius limit
