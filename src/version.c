@@ -41,7 +41,7 @@ static SDL_bool SDLCALL _SDL_IsGameController(int joystick_index) {
 }
 
 static SDL_GameController *SDLCALL _SDL_GameControllerOpen(int joystick_index) {
-    return controller_get_instance();
+    return ControllerGetInstance();
 }
 
 static const char *SDLCALL _SDL_GameControllerName(SDL_GameController *gamecontroller) {
@@ -60,7 +60,7 @@ static SDL_Haptic *SDLCALL _SDL_HapticOpenFromJoystick(SDL_Joystick *joystick) {
     return NULL;
 }
 
-static void controller_attach(void) {
+static void ControllerAttach(void) {
     SDL_Event event = { 0 };
 
     event.cdevice.type = SDL_CONTROLLERDEVICEADDED;
@@ -70,7 +70,7 @@ static void controller_attach(void) {
     pSDL_PushEvent(&event);
 }
 
-static void controller_set_button(Uint8 button, BOOL state) {
+static void ControllerSetButton(Uint8 button, BOOL state) {
     SDL_Event event = { 0 };
 
     event.cbutton.type = state ? SDL_CONTROLLERBUTTONDOWN : SDL_CONTROLLERBUTTONUP;
@@ -82,7 +82,7 @@ static void controller_set_button(Uint8 button, BOOL state) {
     pSDL_PushEvent(&event);
 }
 
-static void controller_set_axis(Uint8 axis, Sint16 value) {
+static void ControllerSetAxis(Uint8 axis, Sint16 value) {
     SDL_Event event = { 0 };
 
     event.caxis.type = SDL_CONTROLLERAXISMOTION;
@@ -95,11 +95,11 @@ static void controller_set_axis(Uint8 axis, Sint16 value) {
 }
 
 static DWORD WINAPI InputThread(LPVOID lpParam) {
-    controller_attach();
+    ControllerAttach();
 
     while (TRUE) {
         if (hGame && GetForegroundWindow() == hGame) {
-            KEYBOARD_STATE *kbstate = keyboard_get_state();
+            KEYBOARD_STATE *kbstate = KeyboardGetState();
 
             RECT rect;
             GetClientRect(hGame, &rect);
@@ -121,17 +121,17 @@ static DWORD WINAPI InputThread(LPVOID lpParam) {
                 }
 
                 if (kbstate->fire.changed) {
-                    controller_set_button(SDL_CONTROLLER_BUTTON_X, kbstate->fire.state);
+                    ControllerSetButton(SDL_CONTROLLER_BUTTON_X, kbstate->fire.state);
                 }
 
                 if (!kbstate->fire.state) {
-                    controller_set_axis(SDL_CONTROLLER_AXIS_LEFTX, 0);
-                    controller_set_axis(SDL_CONTROLLER_AXIS_LEFTY, 0);
+                    ControllerSetAxis(SDL_CONTROLLER_AXIS_LEFTX, 0);
+                    ControllerSetAxis(SDL_CONTROLLER_AXIS_LEFTY, 0);
                 }
 
                 if (!kbstate->camera.state) {
-                    controller_set_axis(SDL_CONTROLLER_AXIS_RIGHTX, 0);
-                    controller_set_axis(SDL_CONTROLLER_AXIS_RIGHTY, 0);
+                    ControllerSetAxis(SDL_CONTROLLER_AXIS_RIGHTX, 0);
+                    ControllerSetAxis(SDL_CONTROLLER_AXIS_RIGHTY, 0);
                 }
             }
 
@@ -149,13 +149,13 @@ static DWORD WINAPI InputThread(LPVOID lpParam) {
                 Sint16 y = (Sint16) (dy * 32767 / MOUSE_RADIUS);
 
                 if (kbstate->fire.state) {
-                    controller_set_axis(SDL_CONTROLLER_AXIS_LEFTX, x);
-                    controller_set_axis(SDL_CONTROLLER_AXIS_LEFTY, y);
+                    ControllerSetAxis(SDL_CONTROLLER_AXIS_LEFTX, x);
+                    ControllerSetAxis(SDL_CONTROLLER_AXIS_LEFTY, y);
                 }
 
                 if (kbstate->camera.state) {
-                    controller_set_axis(SDL_CONTROLLER_AXIS_RIGHTX, x);
-                    controller_set_axis(SDL_CONTROLLER_AXIS_RIGHTY, y);
+                    ControllerSetAxis(SDL_CONTROLLER_AXIS_RIGHTX, x);
+                    ControllerSetAxis(SDL_CONTROLLER_AXIS_RIGHTY, y);
                 }
 
                 double d = sqrt(dx * dx + dy * dy);
@@ -167,17 +167,17 @@ static DWORD WINAPI InputThread(LPVOID lpParam) {
             }
 
             if (kbstate->roll.changed) {
-                controller_set_button(SDL_CONTROLLER_BUTTON_A, kbstate->roll.state);
+                ControllerSetButton(SDL_CONTROLLER_BUTTON_A, kbstate->roll.state);
             }
 
             if ((kbstate->left.changed || kbstate->right.changed || kbstate->fire.changed || kbstate->camera.changed) && !kbstate->fire.state) {
                 Sint16 x = (Sint16) (kbstate->left.state * -32767 + kbstate->right.state * 32767);
-                controller_set_axis(SDL_CONTROLLER_AXIS_LEFTX, x);
+                ControllerSetAxis(SDL_CONTROLLER_AXIS_LEFTX, x);
             }
 
             if ((kbstate->up.changed || kbstate->down.changed || kbstate->fire.changed || kbstate->camera.changed) && !kbstate->fire.state) {
                 Sint16 y = (Sint16) (kbstate->up.state * -32767 + kbstate->down.state * 32767);
-                controller_set_axis(SDL_CONTROLLER_AXIS_LEFTY, y);
+                ControllerSetAxis(SDL_CONTROLLER_AXIS_LEFTY, y);
             }
         }
 

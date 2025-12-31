@@ -15,6 +15,6 @@ struct _SDL_GameController {
     .name = "X360 Controller",
 };
 
-SDL_GameController *controller_get_instance(void) {
+SDL_GameController *ControllerGetInstance(void) {
     return &_controller;
 }
