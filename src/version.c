@@ -12,12 +12,12 @@
 HANDLE hThread = NULL;
 HWND hGame = NULL;
 
+static SDL_Window *(SDLCALL *pSDL_CreateWindow)(const char*, int, int, int, int, Uint32) = NULL;
+
 typedef SDL_bool (SDLCALL *SDL_GetWindowWMInfo_t)(SDL_Window*, SDL_SysWMinfo*);
 static SDL_GetWindowWMInfo_t pSDL_GetWindowWMInfo = NULL;
 
-typedef SDL_Window *(SDLCALL *SDL_CreateWindow_t)(const char*, int, int, int, int, Uint32);
-static SDL_CreateWindow_t pSDL_CreateWindow = NULL;
-SDL_Window *SDLCALL _SDL_CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags) {
+static SDL_Window *SDLCALL _SDL_CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags) {
     SDL_Window *window = pSDL_CreateWindow(title, x, y, w, h, flags);
 
     if (!hGame) {
@@ -193,8 +193,9 @@ void on_attach(void) {
     HMODULE hSDL = GetModuleHandleW(L"SDL2.dll");
 
     // Hook window methods for mouse capture
-    pSDL_GetWindowWMInfo = (SDL_GetWindowWMInfo_t)GetProcAddress(hSDL, "SDL_GetWindowWMInfo");
     MH_CreateHook(GetProcAddress(hSDL, "SDL_CreateWindow"), _SDL_CreateWindow, (LPVOID *)&pSDL_CreateWindow);
+    pSDL_GetWindowWMInfo = (SDL_GetWindowWMInfo_t)GetProcAddress(hSDL, "SDL_GetWindowWMInfo");
+
 
     // Hook event loop methods to feed input
     pSDL_GetTicks = (SDL_GetTicks_t)GetProcAddress(hSDL, "SDL_GetTicks");
