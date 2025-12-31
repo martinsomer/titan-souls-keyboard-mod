@@ -9,8 +9,8 @@
 
 #define MOUSE_RADIUS 100
 
-HANDLE hThread = NULL;
-HWND hGame = NULL;
+static HANDLE hThread = NULL;
+static HWND hGame = NULL;
 
 static SDL_Window *(SDLCALL *pSDL_CreateWindow)(const char*, int, int, int, int, Uint32) = NULL;
 
@@ -36,31 +36,31 @@ static SDL_GetTicks_t pSDL_GetTicks = NULL;
 typedef int (SDLCALL *SDL_PushEvent_t)(SDL_Event*);
 static SDL_PushEvent_t pSDL_PushEvent = NULL;
 
-SDL_bool SDLCALL _SDL_IsGameController(int joystick_index) {
+static SDL_bool SDLCALL _SDL_IsGameController(int joystick_index) {
     return joystick_index == 0 ? SDL_TRUE : SDL_FALSE;
 }
 
-SDL_GameController *SDLCALL _SDL_GameControllerOpen(int joystick_index) {
+static SDL_GameController *SDLCALL _SDL_GameControllerOpen(int joystick_index) {
     return controller_get_instance();
 }
 
-const char *SDLCALL _SDL_GameControllerName(SDL_GameController *gamecontroller) {
+static const char *SDLCALL _SDL_GameControllerName(SDL_GameController *gamecontroller) {
     return gamecontroller->name;
 }
 
-SDL_Joystick *SDLCALL _SDL_GameControllerGetJoystick(SDL_GameController *gamecontroller) {
+static SDL_Joystick *SDLCALL _SDL_GameControllerGetJoystick(SDL_GameController *gamecontroller) {
     return gamecontroller->joystick;
 }
 
-SDL_JoystickID SDLCALL _SDL_JoystickInstanceID(SDL_Joystick *joystick) {
+static SDL_JoystickID SDLCALL _SDL_JoystickInstanceID(SDL_Joystick *joystick) {
     return joystick->instance_id;
 }
 
-SDL_Haptic *SDLCALL _SDL_HapticOpenFromJoystick(SDL_Joystick *joystick) {
+static SDL_Haptic *SDLCALL _SDL_HapticOpenFromJoystick(SDL_Joystick *joystick) {
     return NULL;
 }
 
-void controller_attach(void) {
+static void controller_attach(void) {
     SDL_Event event = { 0 };
 
     event.cdevice.type = SDL_CONTROLLERDEVICEADDED;
@@ -70,7 +70,7 @@ void controller_attach(void) {
     pSDL_PushEvent(&event);
 }
 
-void controller_set_button(Uint8 button, BOOL state) {
+static void controller_set_button(Uint8 button, BOOL state) {
     SDL_Event event = { 0 };
 
     event.cbutton.type = state ? SDL_CONTROLLERBUTTONDOWN : SDL_CONTROLLERBUTTONUP;
@@ -82,7 +82,7 @@ void controller_set_button(Uint8 button, BOOL state) {
     pSDL_PushEvent(&event);
 }
 
-void controller_set_axis(Uint8 axis, Sint16 value) {
+static void controller_set_axis(Uint8 axis, Sint16 value) {
     SDL_Event event = { 0 };
 
     event.caxis.type = SDL_CONTROLLERAXISMOTION;
@@ -94,7 +94,7 @@ void controller_set_axis(Uint8 axis, Sint16 value) {
     pSDL_PushEvent(&event);
 }
 
-DWORD WINAPI InputThread(LPVOID lpParam) {
+static DWORD WINAPI InputThread(LPVOID lpParam) {
     controller_attach();
 
     while (TRUE) {
