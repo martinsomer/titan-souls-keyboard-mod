@@ -17,8 +17,6 @@ typedef struct {
     KEY_STATE down;
 } KEYBOARD_STATE;
 
-static KEYBOARD_STATE _kbstate;
-
 static void KeyboardUpdateKey(KEY_STATE *kstate, int code) {
     kstate->prev = kstate->state;
     kstate->state = (GetAsyncKeyState(code) & 0x8000) != 0;
@@ -26,13 +24,15 @@ static void KeyboardUpdateKey(KEY_STATE *kstate, int code) {
 }
 
 KEYBOARD_STATE *KeyboardGetState(void) {
-    KeyboardUpdateKey(&_kbstate.fire, 0x01);
-    KeyboardUpdateKey(&_kbstate.camera, 0x02);
-    KeyboardUpdateKey(&_kbstate.roll, 0x20);
-    KeyboardUpdateKey(&_kbstate.left, 0x41);
-    KeyboardUpdateKey(&_kbstate.right, 0x44);
-    KeyboardUpdateKey(&_kbstate.up, 0x57);
-    KeyboardUpdateKey(&_kbstate.down, 0x53);
+    static KEYBOARD_STATE kbstate;
 
-    return &_kbstate;
+    KeyboardUpdateKey(&kbstate.fire, 0x01);
+    KeyboardUpdateKey(&kbstate.camera, 0x02);
+    KeyboardUpdateKey(&kbstate.roll, 0x20);
+    KeyboardUpdateKey(&kbstate.left, 0x41);
+    KeyboardUpdateKey(&kbstate.right, 0x44);
+    KeyboardUpdateKey(&kbstate.up, 0x57);
+    KeyboardUpdateKey(&kbstate.down, 0x53);
+
+    return &kbstate;
 }
