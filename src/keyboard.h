@@ -19,10 +19,10 @@ typedef struct {
 
 static KEYBOARD_STATE _kbstate;
 
-static void update_key_state(KEY_STATE *keystate, int key) {
-    keystate->prev = keystate->state;
-    keystate->state = (GetAsyncKeyState(key) & 0x8000) != 0;
-    keystate->changed = keystate->state != keystate->prev;
+static void update_key_state(KEY_STATE *kstate, int code) {
+    kstate->prev = kstate->state;
+    kstate->state = (GetAsyncKeyState(code) & 0x8000) != 0;
+    kstate->changed = kstate->state != kstate->prev;
 }
 
 KEYBOARD_STATE *keyboard_get_state(void) {
