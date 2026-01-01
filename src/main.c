@@ -1,6 +1,6 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include "version.h"
+#include "dllproxy.h"
 #include "MinHook.h"
 #include "controller.h"
 #include "keyboard.h"
@@ -187,7 +187,7 @@ static DWORD WINAPI InputThread(LPVOID lpParam) {
     return 0;
 }
 
-void on_attach(void) {
+void DLLP_OnAttach(void) {
     MH_Initialize();
 
     HMODULE hSDL = GetModuleHandleW(L"SDL2.dll");
@@ -214,7 +214,7 @@ void on_attach(void) {
     hThread = CreateThread(NULL, 0, InputThread, NULL, 0, NULL);
 }
 
-void on_detach(void) {
+void DLLP_OnDetach(void) {
     if (hThread) {
         WaitForSingleObject(hThread, INFINITE);
         CloseHandle(hThread);
