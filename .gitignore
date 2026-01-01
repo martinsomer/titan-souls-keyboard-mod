@@ -1,2 +1,2 @@
-*.dll
-*.obj
+/obj/*.obj
+/bin/version.dll
