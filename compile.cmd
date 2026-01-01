@@ -1,3 +1,5 @@
+IF EXIST bin\version.dll DEL bin\version.dll
+
 cl /LD ^
    /TC src\main.c minhook\src\*.c minhook\src\hde\*.c ^
    /Fo:obj\ ^
