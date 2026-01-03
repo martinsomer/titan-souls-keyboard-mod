@@ -12,18 +12,18 @@
 static HANDLE hThread = NULL;
 static HWND hGame = NULL;
 
-static SDL_Window *(SDLCALL *pSDL_CreateWindow)(const char*, int, int, int, int, Uint32) = NULL;
+static SDL_Window *(SDLCALL *SDL_CreateWindow_fp)(const char*, int, int, int, int, Uint32) = NULL;
 
 typedef SDL_bool (SDLCALL *SDL_GetWindowWMInfo_t)(SDL_Window*, SDL_SysWMinfo*);
-static SDL_GetWindowWMInfo_t pSDL_GetWindowWMInfo = NULL;
+static SDL_GetWindowWMInfo_t SDL_GetWindowWMInfo_fp = NULL;
 
-static SDL_Window *SDLCALL _SDL_CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags) {
-    SDL_Window *window = pSDL_CreateWindow(title, x, y, w, h, flags);
+static SDL_Window *SDLCALL SDL_CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags) {
+    SDL_Window *window = SDL_CreateWindow_fp(title, x, y, w, h, flags);
 
     if (!hGame) {
         SDL_SysWMinfo info;
         SDL_VERSION(&info.version);
-        pSDL_GetWindowWMInfo(window, &info);
+        SDL_GetWindowWMInfo_fp(window, &info);
         hGame = info.info.win.window;
     }
 
@@ -31,32 +31,32 @@ static SDL_Window *SDLCALL _SDL_CreateWindow(const char *title, int x, int y, in
 }
 
 typedef Uint32 (SDLCALL *SDL_GetTicks_t)(void);
-static SDL_GetTicks_t pSDL_GetTicks = NULL;
+static SDL_GetTicks_t SDL_GetTicks_fp = NULL;
 
 typedef int (SDLCALL *SDL_PushEvent_t)(SDL_Event*);
-static SDL_PushEvent_t pSDL_PushEvent = NULL;
+static SDL_PushEvent_t SDL_PushEvent_fp = NULL;
 
-static SDL_bool SDLCALL _SDL_IsGameController(int joystick_index) {
+static SDL_bool SDLCALL SDL_IsGameController(int joystick_index) {
     return joystick_index == 0 ? SDL_TRUE : SDL_FALSE;
 }
 
-static SDL_GameController *SDLCALL _SDL_GameControllerOpen(int joystick_index) {
+static SDL_GameController *SDLCALL SDL_GameControllerOpen(int joystick_index) {
     return ControllerGetInstance();
 }
 
-static const char *SDLCALL _SDL_GameControllerName(SDL_GameController *gamecontroller) {
+static const char *SDLCALL SDL_GameControllerName(SDL_GameController *gamecontroller) {
     return gamecontroller->name;
 }
 
-static SDL_Joystick *SDLCALL _SDL_GameControllerGetJoystick(SDL_GameController *gamecontroller) {
+static SDL_Joystick *SDLCALL SDL_GameControllerGetJoystick(SDL_GameController *gamecontroller) {
     return gamecontroller->joystick;
 }
 
-static SDL_JoystickID SDLCALL _SDL_JoystickInstanceID(SDL_Joystick *joystick) {
+static SDL_JoystickID SDLCALL SDL_JoystickInstanceID(SDL_Joystick *joystick) {
     return joystick->instance_id;
 }
 
-static SDL_Haptic *SDLCALL _SDL_HapticOpenFromJoystick(SDL_Joystick *joystick) {
+static SDL_Haptic *SDLCALL SDL_HapticOpenFromJoystick(SDL_Joystick *joystick) {
     return NULL;
 }
 
@@ -64,34 +64,34 @@ static void ControllerAttach(void) {
     SDL_Event event = { 0 };
 
     event.cdevice.type = SDL_CONTROLLERDEVICEADDED;
-    event.cdevice.timestamp = pSDL_GetTicks();
+    event.cdevice.timestamp = SDL_GetTicks_fp();
     event.cdevice.which = 0;
 
-    pSDL_PushEvent(&event);
+    SDL_PushEvent_fp(&event);
 }
 
 static void ControllerSetButton(Uint8 button, BOOL state) {
     SDL_Event event = { 0 };
 
     event.cbutton.type = state ? SDL_CONTROLLERBUTTONDOWN : SDL_CONTROLLERBUTTONUP;
-    event.cbutton.timestamp = pSDL_GetTicks();
+    event.cbutton.timestamp = SDL_GetTicks_fp();
     event.cbutton.which = 0;
     event.cbutton.button = button;
     event.cbutton.state = state ? SDL_PRESSED : SDL_RELEASED;
 
-    pSDL_PushEvent(&event);
+    SDL_PushEvent_fp(&event);
 }
 
 static void ControllerSetAxis(Uint8 axis, Sint16 value) {
     SDL_Event event = { 0 };
 
     event.caxis.type = SDL_CONTROLLERAXISMOTION;
-    event.caxis.timestamp = pSDL_GetTicks();
+    event.caxis.timestamp = SDL_GetTicks_fp();
     event.caxis.which = 0;
     event.caxis.axis = axis;
     event.caxis.value = value;
 
-    pSDL_PushEvent(&event);
+    SDL_PushEvent_fp(&event);
 }
 
 static DWORD WINAPI InputThread(LPVOID lpParam) {
@@ -193,21 +193,21 @@ void DLLP_OnAttach(void) {
     HMODULE hSDL = GetModuleHandleW(L"SDL2.dll");
 
     // Hook window methods for mouse capture
-    MH_CreateHook(GetProcAddress(hSDL, "SDL_CreateWindow"), _SDL_CreateWindow, (LPVOID *)&pSDL_CreateWindow);
-    pSDL_GetWindowWMInfo = (SDL_GetWindowWMInfo_t)GetProcAddress(hSDL, "SDL_GetWindowWMInfo");
+    MH_CreateHook(GetProcAddress(hSDL, "SDL_CreateWindow"), SDL_CreateWindow, (LPVOID *)&SDL_CreateWindow_fp);
+    SDL_GetWindowWMInfo_fp = (SDL_GetWindowWMInfo_t)GetProcAddress(hSDL, "SDL_GetWindowWMInfo");
 
 
     // Hook event loop methods to feed input
-    pSDL_GetTicks = (SDL_GetTicks_t)GetProcAddress(hSDL, "SDL_GetTicks");
-    pSDL_PushEvent = (SDL_PushEvent_t)GetProcAddress(hSDL, "SDL_PushEvent");
+    SDL_GetTicks_fp = (SDL_GetTicks_t)GetProcAddress(hSDL, "SDL_GetTicks");
+    SDL_PushEvent_fp = (SDL_PushEvent_t)GetProcAddress(hSDL, "SDL_PushEvent");
 
     // Hook controller methods to create fake device
-    MH_CreateHook(GetProcAddress(hSDL, "SDL_IsGameController"), _SDL_IsGameController, NULL);
-    MH_CreateHook(GetProcAddress(hSDL, "SDL_GameControllerOpen"), _SDL_GameControllerOpen, NULL);
-    MH_CreateHook(GetProcAddress(hSDL, "SDL_GameControllerName"), _SDL_GameControllerName, NULL);
-    MH_CreateHook(GetProcAddress(hSDL, "SDL_GameControllerGetJoystick"), _SDL_GameControllerGetJoystick, NULL);
-    MH_CreateHook(GetProcAddress(hSDL, "SDL_JoystickInstanceID"), _SDL_JoystickInstanceID, NULL);
-    MH_CreateHook(GetProcAddress(hSDL, "SDL_HapticOpenFromJoystick"), _SDL_HapticOpenFromJoystick, NULL);
+    MH_CreateHook(GetProcAddress(hSDL, "SDL_IsGameController"), SDL_IsGameController, NULL);
+    MH_CreateHook(GetProcAddress(hSDL, "SDL_GameControllerOpen"), SDL_GameControllerOpen, NULL);
+    MH_CreateHook(GetProcAddress(hSDL, "SDL_GameControllerName"), SDL_GameControllerName, NULL);
+    MH_CreateHook(GetProcAddress(hSDL, "SDL_GameControllerGetJoystick"), SDL_GameControllerGetJoystick, NULL);
+    MH_CreateHook(GetProcAddress(hSDL, "SDL_JoystickInstanceID"), SDL_JoystickInstanceID, NULL);
+    MH_CreateHook(GetProcAddress(hSDL, "SDL_HapticOpenFromJoystick"), SDL_HapticOpenFromJoystick, NULL);
 
     MH_EnableHook(MH_ALL_HOOKS);
 
