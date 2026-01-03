@@ -24,23 +24,23 @@ typedef DWORD (WINAPI *VerLanguageNameW_t)(DWORD, LPWSTR, DWORD);
 typedef BOOL (WINAPI *VerQueryValueA_t)(LPCVOID, LPCSTR, LPVOID*, PUINT);
 typedef BOOL (WINAPI *VerQueryValueW_t)(LPCVOID, LPCWSTR, LPVOID*, PUINT);
 
-static GetFileVersionInfoA_t pGetFileVersionInfoA = NULL;
-static GetFileVersionInfoByHandle_t pGetFileVersionInfoByHandle = NULL;
-static GetFileVersionInfoExA_t pGetFileVersionInfoExA = NULL;
-static GetFileVersionInfoExW_t pGetFileVersionInfoExW = NULL;
-static GetFileVersionInfoSizeA_t pGetFileVersionInfoSizeA = NULL;
-static GetFileVersionInfoSizeExA_t pGetFileVersionInfoSizeExA = NULL;
-static GetFileVersionInfoSizeExW_t pGetFileVersionInfoSizeExW = NULL;
-static GetFileVersionInfoSizeW_t pGetFileVersionInfoSizeW = NULL;
-static GetFileVersionInfoW_t pGetFileVersionInfoW = NULL;
-static VerFindFileA_t pVerFindFileA = NULL;
-static VerFindFileW_t pVerFindFileW = NULL;
-static VerInstallFileA_t pVerInstallFileA = NULL;
-static VerInstallFileW_t pVerInstallFileW = NULL;
-static VerLanguageNameA_t pVerLanguageNameA = NULL;
-static VerLanguageNameW_t pVerLanguageNameW = NULL;
-static VerQueryValueA_t pVerQueryValueA = NULL;
-static VerQueryValueW_t pVerQueryValueW = NULL;
+static GetFileVersionInfoA_t GetFileVersionInfoA_fp = NULL;
+static GetFileVersionInfoByHandle_t GetFileVersionInfoByHandle_fp = NULL;
+static GetFileVersionInfoExA_t GetFileVersionInfoExA_fp = NULL;
+static GetFileVersionInfoExW_t GetFileVersionInfoExW_fp = NULL;
+static GetFileVersionInfoSizeA_t GetFileVersionInfoSizeA_fp = NULL;
+static GetFileVersionInfoSizeExA_t GetFileVersionInfoSizeExA_fp = NULL;
+static GetFileVersionInfoSizeExW_t GetFileVersionInfoSizeExW_fp = NULL;
+static GetFileVersionInfoSizeW_t GetFileVersionInfoSizeW_fp = NULL;
+static GetFileVersionInfoW_t GetFileVersionInfoW_fp = NULL;
+static VerFindFileA_t VerFindFileA_fp = NULL;
+static VerFindFileW_t VerFindFileW_fp = NULL;
+static VerInstallFileA_t VerInstallFileA_fp = NULL;
+static VerInstallFileW_t VerInstallFileW_fp = NULL;
+static VerLanguageNameA_t VerLanguageNameA_fp = NULL;
+static VerLanguageNameW_t VerLanguageNameW_fp = NULL;
+static VerQueryValueA_t VerQueryValueA_fp = NULL;
+static VerQueryValueW_t VerQueryValueW_fp = NULL;
 
 static void DLLP_Setup(void) {
     WCHAR sysdir[MAX_PATH];
@@ -49,23 +49,23 @@ static void DLLP_Setup(void) {
     hVersion = LoadLibraryW(sysdir);
     if (!hVersion) return;
 
-    pGetFileVersionInfoA = (GetFileVersionInfoA_t)GetProcAddress(hVersion, "GetFileVersionInfoA");
-    pGetFileVersionInfoByHandle = (GetFileVersionInfoByHandle_t)GetProcAddress(hVersion, "GetFileVersionInfoByHandle");
-    pGetFileVersionInfoExA = (GetFileVersionInfoExA_t)GetProcAddress(hVersion, "GetFileVersionInfoExA");
-    pGetFileVersionInfoExW = (GetFileVersionInfoExW_t)GetProcAddress(hVersion, "GetFileVersionInfoExW");
-    pGetFileVersionInfoSizeA = (GetFileVersionInfoSizeA_t)GetProcAddress(hVersion, "GetFileVersionInfoSizeA");
-    pGetFileVersionInfoSizeExA = (GetFileVersionInfoSizeExA_t)GetProcAddress(hVersion, "GetFileVersionInfoSizeExA");
-    pGetFileVersionInfoSizeExW = (GetFileVersionInfoSizeExW_t)GetProcAddress(hVersion, "GetFileVersionInfoSizeExW");
-    pGetFileVersionInfoSizeW = (GetFileVersionInfoSizeW_t)GetProcAddress(hVersion, "GetFileVersionInfoSizeW");
-    pGetFileVersionInfoW = (GetFileVersionInfoW_t)GetProcAddress(hVersion, "GetFileVersionInfoW");
-    pVerFindFileA = (VerFindFileA_t)GetProcAddress(hVersion, "VerFindFileA");
-    pVerFindFileW = (VerFindFileW_t)GetProcAddress(hVersion, "VerFindFileW");
-    pVerInstallFileA = (VerInstallFileA_t)GetProcAddress(hVersion, "VerInstallFileA");
-    pVerInstallFileW = (VerInstallFileW_t)GetProcAddress(hVersion, "VerInstallFileW");
-    pVerLanguageNameA = (VerLanguageNameA_t)GetProcAddress(hVersion, "VerLanguageNameA");
-    pVerLanguageNameW = (VerLanguageNameW_t)GetProcAddress(hVersion, "VerLanguageNameW");
-    pVerQueryValueA = (VerQueryValueA_t)GetProcAddress(hVersion, "VerQueryValueA");
-    pVerQueryValueW = (VerQueryValueW_t)GetProcAddress(hVersion, "VerQueryValueW");
+    GetFileVersionInfoA_fp = (GetFileVersionInfoA_t)GetProcAddress(hVersion, "GetFileVersionInfoA");
+    GetFileVersionInfoByHandle_fp = (GetFileVersionInfoByHandle_t)GetProcAddress(hVersion, "GetFileVersionInfoByHandle");
+    GetFileVersionInfoExA_fp = (GetFileVersionInfoExA_t)GetProcAddress(hVersion, "GetFileVersionInfoExA");
+    GetFileVersionInfoExW_fp = (GetFileVersionInfoExW_t)GetProcAddress(hVersion, "GetFileVersionInfoExW");
+    GetFileVersionInfoSizeA_fp = (GetFileVersionInfoSizeA_t)GetProcAddress(hVersion, "GetFileVersionInfoSizeA");
+    GetFileVersionInfoSizeExA_fp = (GetFileVersionInfoSizeExA_t)GetProcAddress(hVersion, "GetFileVersionInfoSizeExA");
+    GetFileVersionInfoSizeExW_fp = (GetFileVersionInfoSizeExW_t)GetProcAddress(hVersion, "GetFileVersionInfoSizeExW");
+    GetFileVersionInfoSizeW_fp = (GetFileVersionInfoSizeW_t)GetProcAddress(hVersion, "GetFileVersionInfoSizeW");
+    GetFileVersionInfoW_fp = (GetFileVersionInfoW_t)GetProcAddress(hVersion, "GetFileVersionInfoW");
+    VerFindFileA_fp = (VerFindFileA_t)GetProcAddress(hVersion, "VerFindFileA");
+    VerFindFileW_fp = (VerFindFileW_t)GetProcAddress(hVersion, "VerFindFileW");
+    VerInstallFileA_fp = (VerInstallFileA_t)GetProcAddress(hVersion, "VerInstallFileA");
+    VerInstallFileW_fp = (VerInstallFileW_t)GetProcAddress(hVersion, "VerInstallFileW");
+    VerLanguageNameA_fp = (VerLanguageNameA_t)GetProcAddress(hVersion, "VerLanguageNameA");
+    VerLanguageNameW_fp = (VerLanguageNameW_t)GetProcAddress(hVersion, "VerLanguageNameW");
+    VerQueryValueA_fp = (VerQueryValueA_t)GetProcAddress(hVersion, "VerQueryValueA");
+    VerQueryValueW_fp = (VerQueryValueW_t)GetProcAddress(hVersion, "VerQueryValueW");
 }
 
 static void DLLP_Cleanup(void) {
@@ -74,88 +74,88 @@ static void DLLP_Cleanup(void) {
 }
 
 BOOL WINAPI GetFileVersionInfoA(LPCSTR lptstrFilename, DWORD dwHandle, DWORD dwLen, LPVOID lpData) {
-    if (!pGetFileVersionInfoA) return FALSE;
-    return pGetFileVersionInfoA(lptstrFilename, dwHandle, dwLen, lpData);
+    if (!GetFileVersionInfoA_fp) return FALSE;
+    return GetFileVersionInfoA_fp(lptstrFilename, dwHandle, dwLen, lpData);
 }
 
 BOOL WINAPI GetFileVersionInfoByHandle(DWORD dwFlags, HANDLE hFile, LPVOID *lplpData, PDWORD pdwLen) {
-    if (!pGetFileVersionInfoByHandle) return FALSE;
-    return pGetFileVersionInfoByHandle(dwFlags, hFile, lplpData, pdwLen);
+    if (!GetFileVersionInfoByHandle_fp) return FALSE;
+    return GetFileVersionInfoByHandle_fp(dwFlags, hFile, lplpData, pdwLen);
 }
 
 BOOL WINAPI GetFileVersionInfoExA(DWORD dwFlags, LPCSTR lpwstrFilename, DWORD dwHandle, DWORD dwLen, LPVOID lpData) {
-    if (!pGetFileVersionInfoExA) return FALSE;
-    return pGetFileVersionInfoExA(dwFlags, lpwstrFilename, dwHandle, dwLen, lpData);
+    if (!GetFileVersionInfoExA_fp) return FALSE;
+    return GetFileVersionInfoExA_fp(dwFlags, lpwstrFilename, dwHandle, dwLen, lpData);
 }
 
 BOOL WINAPI GetFileVersionInfoExW(DWORD dwFlags, LPCWSTR lpwstrFilename, DWORD dwHandle, DWORD dwLen, LPVOID lpData) {
-    if (!pGetFileVersionInfoExW) return FALSE;
-    return pGetFileVersionInfoExW(dwFlags, lpwstrFilename, dwHandle, dwLen, lpData);
+    if (!GetFileVersionInfoExW_fp) return FALSE;
+    return GetFileVersionInfoExW_fp(dwFlags, lpwstrFilename, dwHandle, dwLen, lpData);
 }
 
 DWORD WINAPI GetFileVersionInfoSizeA(LPCSTR lptstrFilename, LPDWORD lpdwHandle) {
-    if (!pGetFileVersionInfoSizeA) return 0;
-    return pGetFileVersionInfoSizeA(lptstrFilename, lpdwHandle);
+    if (!GetFileVersionInfoSizeA_fp) return 0;
+    return GetFileVersionInfoSizeA_fp(lptstrFilename, lpdwHandle);
 }
 
 DWORD WINAPI GetFileVersionInfoSizeExA(DWORD dwFlags, LPCSTR lpwstrFilename, LPDWORD lpdwHandle) {
-    if (!pGetFileVersionInfoSizeExA) return 0;
-    return pGetFileVersionInfoSizeExA(dwFlags, lpwstrFilename, lpdwHandle);
+    if (!GetFileVersionInfoSizeExA_fp) return 0;
+    return GetFileVersionInfoSizeExA_fp(dwFlags, lpwstrFilename, lpdwHandle);
 }
 
 DWORD WINAPI GetFileVersionInfoSizeExW(DWORD dwFlags, LPCWSTR lpwstrFilename, LPDWORD lpdwHandle) {
-    if (!pGetFileVersionInfoSizeExW) return 0;
-    return pGetFileVersionInfoSizeExW(dwFlags, lpwstrFilename, lpdwHandle);
+    if (!GetFileVersionInfoSizeExW_fp) return 0;
+    return GetFileVersionInfoSizeExW_fp(dwFlags, lpwstrFilename, lpdwHandle);
 }
 
 DWORD WINAPI GetFileVersionInfoSizeW(LPCWSTR lptstrFilename, LPDWORD lpdwHandle) {
-    if (!pGetFileVersionInfoSizeW) return 0;
-    return pGetFileVersionInfoSizeW(lptstrFilename, lpdwHandle);
+    if (!GetFileVersionInfoSizeW_fp) return 0;
+    return GetFileVersionInfoSizeW_fp(lptstrFilename, lpdwHandle);
 }
 
 BOOL WINAPI GetFileVersionInfoW(LPCWSTR lptstrFilename, DWORD dwHandle, DWORD dwLen, LPVOID lpData) {
-    if (!pGetFileVersionInfoW) return FALSE;
-    return pGetFileVersionInfoW(lptstrFilename, dwHandle, dwLen, lpData);
+    if (!GetFileVersionInfoW_fp) return FALSE;
+    return GetFileVersionInfoW_fp(lptstrFilename, dwHandle, dwLen, lpData);
 }
 
 DWORD WINAPI VerFindFileA(DWORD uFlags, LPCSTR szFileName, LPCSTR szWinDir, LPCSTR szAppDir, LPSTR szCurDir, PUINT puCurDirLen, LPSTR szDestDir, PUINT puDestDirLen) {
-    if (!pVerFindFileA) return 0xFFFF;
-    return pVerFindFileA(uFlags, szFileName, szWinDir, szAppDir, szCurDir, puCurDirLen, szDestDir, puDestDirLen);
+    if (!VerFindFileA_fp) return 0xFFFF;
+    return VerFindFileA_fp(uFlags, szFileName, szWinDir, szAppDir, szCurDir, puCurDirLen, szDestDir, puDestDirLen);
 }
 
 DWORD WINAPI VerFindFileW(DWORD uFlags, LPCWSTR szFileName, LPCWSTR szWinDir, LPCWSTR szAppDir, LPWSTR szCurDir, PUINT puCurDirLen, LPWSTR szDestDir, PUINT puDestDirLen) {
-    if (!pVerFindFileW) return 0xFFFF;
-    return pVerFindFileW(uFlags, szFileName, szWinDir, szAppDir, szCurDir, puCurDirLen, szDestDir, puDestDirLen);
+    if (!VerFindFileW_fp) return 0xFFFF;
+    return VerFindFileW_fp(uFlags, szFileName, szWinDir, szAppDir, szCurDir, puCurDirLen, szDestDir, puDestDirLen);
 }
 
 DWORD WINAPI VerInstallFileA(DWORD uFlags, LPCSTR szSrcFileName, LPCSTR szDestFileName, LPCSTR szSrcDir, LPCSTR szDestDir, LPCSTR szCurDir, LPSTR szTmpFile, PUINT puTmpFileLen) {
-    if (!pVerInstallFileA) return 0xFFFFFFFFL;
-    return pVerInstallFileA(uFlags, szSrcFileName, szDestFileName, szSrcDir, szDestDir, szCurDir, szTmpFile, puTmpFileLen);
+    if (!VerInstallFileA_fp) return 0xFFFFFFFFL;
+    return VerInstallFileA_fp(uFlags, szSrcFileName, szDestFileName, szSrcDir, szDestDir, szCurDir, szTmpFile, puTmpFileLen);
 }
 
 DWORD WINAPI VerInstallFileW(DWORD uFlags, LPCWSTR szSrcFileName, LPCWSTR szDestFileName, LPCWSTR szSrcDir, LPCWSTR szDestDir, LPCWSTR szCurDir, LPWSTR szTmpFile, PUINT puTmpFileLen) {
-    if (!pVerInstallFileW) return 0xFFFFFFFFL;
-    return pVerInstallFileW(uFlags, szSrcFileName, szDestFileName, szSrcDir, szDestDir, szCurDir, szTmpFile, puTmpFileLen);
+    if (!VerInstallFileW_fp) return 0xFFFFFFFFL;
+    return VerInstallFileW_fp(uFlags, szSrcFileName, szDestFileName, szSrcDir, szDestDir, szCurDir, szTmpFile, puTmpFileLen);
 }
 
 DWORD WINAPI VerLanguageNameA(DWORD wLang, LPSTR szLang, DWORD cchLang) {
-    if (!pVerLanguageNameA) return 0;
-    return pVerLanguageNameA(wLang, szLang, cchLang);
+    if (!VerLanguageNameA_fp) return 0;
+    return VerLanguageNameA_fp(wLang, szLang, cchLang);
 }
 
 DWORD WINAPI VerLanguageNameW(DWORD wLang, LPWSTR szLang, DWORD cchLang) {
-    if (!pVerLanguageNameW) return 0;
-    return pVerLanguageNameW(wLang, szLang, cchLang);
+    if (!VerLanguageNameW_fp) return 0;
+    return VerLanguageNameW_fp(wLang, szLang, cchLang);
 }
 
 BOOL WINAPI VerQueryValueA(LPCVOID pBlock, LPCSTR lpSubBlock, LPVOID *lplpBuffer, PUINT puLen) {
-    if (!pVerQueryValueA) return FALSE;
-    return pVerQueryValueA(pBlock, lpSubBlock, lplpBuffer, puLen);
+    if (!VerQueryValueA_fp) return FALSE;
+    return VerQueryValueA_fp(pBlock, lpSubBlock, lplpBuffer, puLen);
 }
 
 BOOL WINAPI VerQueryValueW(LPCVOID pBlock, LPCWSTR lpSubBlock, LPVOID *lplpBuffer, PUINT puLen) {
-    if (!pVerQueryValueW) return FALSE;
-    return pVerQueryValueW(pBlock, lpSubBlock, lplpBuffer, puLen);
+    if (!VerQueryValueW_fp) return FALSE;
+    return VerQueryValueW_fp(pBlock, lpSubBlock, lplpBuffer, puLen);
 }
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved) {
